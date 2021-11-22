@@ -1,0 +1,165 @@
+Stock Exchange Service
+Problem statement :
+
+Build an application where public investors can come to buy/sell stocks throughout the day. Different companies can register themselves on that stock exchange.
+
+There will be an initial company worth and a chunk of shares for buying/selling apart from this initial company worth. Please note that buy and sell can happen on this chunk of shares only and Chunk of shares has nothing to do with initial company worth.
+
+Investors can buy and sell shares at market share price only.
+
+Market share price (MSP) = company worth/total shares (total shares will be constant)
+New Company worth = Current Company worth + MSP
+
+Investors can give the count of shares for buying/selling but the MSP will be calculated on each share incrementally.
+
+You can buy and sell shares from and to the company only respectively.
+
+A precision upto 2 decimal places is fine
+
+There is a transaction cost involved with every transaction which will be 1% of the total buying/selling cost of that transaction. Transaction cost will be the profit for the stock exchange.
+Note : Assume that the investor has unlimited funds to buy and sell shares. Transaction cost will not affect the average buying/selling cost by the investor.
+
+Basic Requirements :
+Registering stock/company on exchange by company -
+Input format :
+RC, <stock_name>, <count_of_shares>, <initial_price_per_share>, <initial_company_worth> 
+Output format : 
+<Status>
+Registering investor in stock exchange -
+Input format :
+RI, <investor_name>
+Output format : 
+<Status>
+Buying and Selling Shares -
+Show the average buying/selling cost, total buying/selling cost 
+Input format : 
+Buy or Sell, <stock_name>, <investor_name>, <count_of_shares>
+Output format :
+<Status>, <Avg Buying/Selling Cost>, <Total Buying/Selling Cost>
+For a given investor -> Show the current stocks owned by that investor in sorted order of stock name.
+Input format : I, investor_name
+Output format : List of (Stock name : Quantity)
+For a given company -> Show Company’s Current Worth, Market Share Price (MSP) of the stock and the stocks remaining for the investors.
+Input format : C, <company_name>
+Output format : <Company’s current worth>, <Market Share Price>, <Stock Remaining>
+Show all listed stocks on the stock exchange with their corresponding % change in market price.
+Net % price change in any stock is the increase in price from the initial_price_per_stock.
+Input format : L
+Output format : <Stock Name>, <% change>, <Current market price>
+Transaction Profit of the stock exchange.
+Show the current transaction profit of the stock exchange.
+Input format : T
+Output format: <Transaction Profit>
+
+Bonus Requirements :
+Maintain the transaction history for all investors. All new transactions should get appended to the existing transaction records for that investor. Show the transactions in sorted order of their transaction ids.
+Input format : TH, <investor_name>
+Output format : <Transaction id>, <Stock name>, Buy or Sell, <Qty>, <Average Buy/Sell Cost>, <Total Buy/Sell cost>
+
+Examples :
+
+Register a company
+RC, reliance, 100, 10, 1000 -> Registered
+RC, adani, 90, 10, 900 -> Registered
+
+Register an investor
+RI, Rahul -> Registered
+
+Buy and sell shares
+Buy shares
+Input1 : Buy, reliance, Rahul, 2
+Output1 : Success, Avg buying  price  10.05, Total buying price 20.1
+
+
+Input2 : Buy, reliance, Raj, 2
+Output2 : Success , Avg  buying price  10.25 , Total buying price 20.50
+
+Calculation for Rahul’s transaction :-
+MSP for 1st stock - 1000/100 = 10.0
+Company worth = (1000 + 10 = 1010), stocks remaining=99
+MSP for 2nd stock - 1010/100 = 10.1 [Dividing by 100 because total stocks will always remain 100 irrespective of any number of buys and sells]
+Company worth = (1010 + 10.1 = 1020.1), stocks remaining = 98
+Total buying price for Rahul’s transaction = Total Price = (10.0 + 10.1) = 20.1
+Average buying price for Rahul’s transaction = (Total Price) / Qty = 20.1/2 = 10.05
+
+	Calculation for Raj’s transaction :-
+		MSP for 1st stock - 1020.1/100 = 10.20
+		Company worth = (1020.1 + 10.20) = 1030.30, stocks remaining = 97
+		MSP for 2nd stock - 1030.301/100 = 10.30
+		Company worth = (1030.30 + 10.30) = 1040.60
+		Total buying price for Raj’s transaction = Total Price = (10.20 + 10.30) = 20.50
+		Average buying price for Raj’s transaction = (Total Price) / Qty = 20.50/2 = 10.25
+
+Sell shares
+Sell, reliance, Rahul, 2 -> Success , Avg selling price 10.36  , Total selling price 20.72
+
+Calculation :- 
+Company worth = 1040.60, stocks remaining = 96
+MSP for 1st stock - 1040.60/100 = 10.41
+Company’s new worth = (1040.60 - 10.41) = 1030.19, stocks remaining=97
+MSP for 2nd stock - 1030.19/100 = 10.30
+Total selling price = (10.41 + 10.30) = 20.71
+Average selling price = (Total Selling Price) / Qty = 20.71/2 = 10.35
+Company’s new worth = (1030.19 - 10.35) = 1019.84, stocks remaining=98
+
+
+ Investor’s view
+Input : I, Raj
+Output : [Assume Raj bought 3 shares of Adani and 2 shares of reliance]
+Adani: 3
+Reliance: 2
+
+Company’s view 
+Input : C, reliance
+Output :
+Company worth=1020.39
+Stocks remaining=98
+Current market price=10.20
+
+Stock exchange’s view
+Input : L
+Output :
+Reliance 10.20 +0.2%  (calculated on initial price 10)
+Adani      9.00   +0.0%
+
+Transaction Profit of stock exchange :
+Input : T
+Output : 
+	Transaction profit = 0.2
+	(Assume only Rahul bought 2 Reliance shares. So, total transaction amount = 20.1
+	And transaction profit = 1% of 20.1 = 0.2)
+
+Bonus Example :
+Input : TH, Rahul
+Output : 
+1, reliance, Buy, 2,10.05, 20.10
+	2, reliance, Sell, 2,10.35, 20.71
+	
+Evaluation criteria :
+Demo-able code
+Separation of concerns
+Functional correctness
+Code readability
+Abstractions
+Entity Modeling
+Handling edge cases
+Usage of design patterns, where applicable
+Testability
+Language proficiency
+Design should be extensible. 
+The code should be parameterized rather than hard coded.
+
+Candidate Guidelines
+Code should be demo-able (very important), either by using a main driver program or test cases. 
+Create the sample data yourself. You can put it into a file, test case or main driver program itself. Don’t waste time if you’re having trouble reading data from a file, hard code it in the driver/main program.
+Attempt bonus part only when basic requirements are completed already.
+Prioritize functional correctness and completeness, with proper corner case handling.
+You will have 1.5 hrs to solve the question completely.
+Code should be readable, modular, testable, extensible with proper naming conventions. It should be easy to add/remove functionality without rewriting the entire codebase. 
+Avoid writing monolithic code.
+Code should handle edge cases properly and fail gracefully.
+Don’t use any database, store all the data in memory.
+Please do not access the internet for anything EXCEPT syntax
+You are free to use the language of your choice
+All work should be your own
+
